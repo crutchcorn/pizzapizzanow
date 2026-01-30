@@ -1,15 +1,24 @@
 import { promises as fs } from 'fs';
+import { existsSync } from 'fs';
 import path from 'path';
-import { createServer } from 'https';
 import { WebSocketServer } from 'ws';
+import {Server, createServer} from "node:https";
 
-const cert = await fs.readFile(path.join(import.meta.dirname, "../localhost.pem"), 'utf-8');
-const key = await fs.readFile(path.join(import.meta.dirname, "../localhost-key.pem"), 'utf-8');
-
-const server = createServer({
-  cert: cert,
-  key: key
-});
+let server: Server;
+const certPath = path.join(import.meta.dirname, "../localhost.pem")
+const keyPath = path.join(import.meta.dirname, "../localhost-key.pem")
+if (
+  existsSync(certPath) && existsSync(keyPath)
+) {
+  const cert = await fs.readFile(certPath, 'utf-8');
+  const key = await fs.readFile(keyPath, 'utf-8');
+  server = createServer({
+    cert: cert,
+    key: key
+  });
+} else {
+  server = createServer();
+}
 
 const wss = new WebSocketServer({ server });
 
