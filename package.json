@@ -17,6 +17,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "twilio": "^5.12.0",
     "ws": "^8.19.0"
   }
 }
