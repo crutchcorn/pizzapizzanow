@@ -1,20 +1,28 @@
-import { WebSocketServer } from 'ws';
 import {createServer} from "node:http";
+import { WebSocketServer } from 'ws';
+import express from "express";
 
-const server = createServer();
+const app = express();
+const server = createServer(app);
+const port = process.env.PORT || 10000
 
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({ server, path: '/ws' });
 
-wss.on('connection', function connection(ws) {
-  ws.on('error', console.error);
+// HTTP routes
+app.get('/', (req, res) => {
+  res.send('Hello over HTTP!')
+})
 
-  ws.on('message', function message(data) {
-    console.log('received: %s', data);
-  });
+// WebSocket connections
+wss.on('connection', (ws) => {
+  console.log('WebSocket client connected')
 
-  ws.send('something');
-});
+  ws.on('message', (message) => {
+    console.log('Received:', message.toString())
+    ws.send(`Hello over WebSocket!`)
+  })
+})
 
-server.listen(process.env.PORT || 8080);
-
-server.on('error', console.error);
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`)
+})
