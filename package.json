@@ -1,6 +1,7 @@
 {
   "name": "twilio-pizza-call",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -12,6 +13,10 @@
   "packageManager": "pnpm@10.23.0",
   "devDependencies": {
     "@types/node": "^25.1.0",
+    "@types/ws": "^8.18.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "ws": "^8.19.0"
   }
 }
